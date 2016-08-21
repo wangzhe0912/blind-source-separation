@@ -1,0 +1,29 @@
+clc
+m                         =2;%number of mixtures
+n                         =2;%number of sources
+tao                       =20;%time delay 
+H                         =rand(m,tao);
+lu                        =1.4;
+ta                        =0.7;
+FS                        =44100;
+dd1                       =1;
+dd2                       =1;
+S                         =zeros(2,size(s,2));
+for k    =5+tao:size(s,2)
+for i    =1:tao
+         S(1,k)           =S(1,k)+H(1,i)*s(1,k-i)+ta*H(2,i)*s(3,k-i-dd1);
+         S(2,k)           =S(2,k)+lu*H(1,i)*s(1,k-i-dd2)+H(2,i)*s(3,k-i);
+end
+end
+S1                        =S(1,10+tao:size(s,2));
+S2                        =S(2,10+tao:size(s,2));
+X                         =[S1;S2];
+X                         =X;
+NFFT                      =1024;
+OVERLAP                   =512;
+N                         =1024;
+[Y1,Y2]                   = ica_f(X,NFFT,FS,OVERLAP,N);
+% subplot(2,1,1);
+% plot(Y1,'.');
+% subplot(2,1,2);
+% plot(Y2,'r');
